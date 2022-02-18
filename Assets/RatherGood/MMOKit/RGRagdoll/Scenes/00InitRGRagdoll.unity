@@ -721,7 +721,7 @@ MonoBehaviour:
   enableRatherGoodRagdoll: 1
   prefabUICombatTextRG: {fileID: 3626440953524280084, guid: de26f73024bbf4143b04612f829e3eac,
     type: 3}
-  debugRagdollCollidersInEditor: 1
+  debugRagdollCollidersInEditor: 0
   ragdollLayerMask:
     layerIndex: 16
   dimensionType: 0

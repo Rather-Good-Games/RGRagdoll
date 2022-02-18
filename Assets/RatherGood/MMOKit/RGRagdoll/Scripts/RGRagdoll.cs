@@ -14,7 +14,11 @@ namespace MultiplayerARPG
 
         public bool isRagdoll = false;
 
-        [SerializeField] BaseCharacterEntity baseCharacterEntity;
+        BaseCharacterEntity baseCharacterEntity;
+
+        Collider baseCharCollider;
+
+        Animator baseCharAnimator;
 
         public DamageableHitBox_RG[] damageableHitBoxes;
 
@@ -22,8 +26,7 @@ namespace MultiplayerARPG
         [SerializeField] bool toggleRagdoll = false;
         public void ToggleRagdoll()
         {
-            isRagdoll = !isRagdoll;
-            SetRagdoll(isRagdoll);
+            SetRagdoll(!isRagdoll);
         }
 
         [InspectorButton(nameof(FindColliders))]
@@ -45,19 +48,34 @@ namespace MultiplayerARPG
             }
 
             damageableHitBoxes = dhbList.ToArray();
-            dhbList.Clear();
+
+        }
+
+        [InspectorButton(nameof(RemoveColliders))]
+        [SerializeField] bool removeColliders = false;
+        public void RemoveColliders()
+        {
+            foreach (var dhb in damageableHitBoxes)
+            {
+                dhb.gameObject.RemoveComponents<DamageableHitBox_RG>();
+            }
+
+            damageableHitBoxes = null;
         }
 
         private void Awake()
         {
             baseCharacterEntity = GetComponentInParent<BaseCharacterEntity>();
 
+            baseCharCollider = baseCharacterEntity.GetComponent<Collider>();
+
+            baseCharAnimator = baseCharacterEntity.GetComponent<Animator>();
+
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                baseCharacterEntity.GetComponent<Collider>().enabled = false; //always 
-                baseCharacterEntity.GetComponent<Animator>().enabled = true; //always 
-                baseCharacterEntity.onDead.AddListener(SetRagdollOn);
-                baseCharacterEntity.onRespawn.AddListener(SetRagdollOff);
+                baseCharCollider.enabled = false; //always 
+                baseCharAnimator.enabled = true; //always 
+
             }
 
         }
@@ -65,43 +83,49 @@ namespace MultiplayerARPG
         {
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                baseCharacterEntity.GetComponent<Collider>().enabled = false;
+                baseCharCollider.enabled = false;
 
                 FindColliders();
             }
             else
             {
-                baseCharacterEntity.GetComponent<Collider>().enabled = true;
+                baseCharCollider.enabled = true;
             }
 
-
         }
-        private void OnDestroy()
+
+        private void OnEnable()
         {
-            baseCharacterEntity.onDead.RemoveListener(SetRagdollOn);
+            baseCharacterEntity.onDead.AddListener(SetRagdollOn);
+            baseCharacterEntity.onRespawn.AddListener(SetRagdollOff);
         }
 
+        private void OnDisable()
+        {
+            baseCharacterEntity.onDead.AddListener(SetRagdollOn);
+            baseCharacterEntity.onRespawn.AddListener(SetRagdollOff);
+        }
         void Update()
         {
 
         }
         void SetRagdollOn()
         {
-            isRagdoll = true;
-            SetRagdoll(isRagdoll);
+            SetRagdoll(true);
         }
 
         void SetRagdollOff()
         {
-            isRagdoll = false;
-            SetRagdoll(isRagdoll);
+            SetRagdoll(false);
         }
         public void SetRagdoll(bool ragdoll)
         {
-            //disable main collider
-            baseCharacterEntity.GetComponent<Collider>().enabled = false; //always false
+            isRagdoll = ragdoll;
 
-            baseCharacterEntity.GetComponent<Animator>().enabled = !ragdoll; //always false
+            //disable main collider
+            baseCharCollider.enabled = false; //always false
+
+            baseCharAnimator.enabled = !ragdoll; //always false
 
             foreach (DamageableHitBox_RG dhb in damageableHitBoxes)
             {
@@ -110,14 +134,8 @@ namespace MultiplayerARPG
                 col.attachedRigidbody.isKinematic = !ragdoll;
                 col.attachedRigidbody.useGravity = ragdoll;
 
-                if (ragdoll)
-                {
-                    col.gameObject.layer = GameInstance.Singleton.ragdollLayerMask;
-                }
-                else
-                {
-                    col.gameObject.layer = GameInstance.Singleton.playerLayer;
-                }
+                col.gameObject.layer = (ragdoll) ? GameInstance.Singleton.ragdollLayerMask : GameInstance.Singleton.playerLayer;
+
             }
         }
 
@@ -141,7 +159,7 @@ namespace MultiplayerARPG
     }
 
     /// <summary>
-    /// Label body part fro combat text.
+    /// Label body part for combat text.
     /// </summary>
     [System.Serializable]
     public enum RagdollBodyPart

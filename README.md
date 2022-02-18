@@ -3,13 +3,14 @@
 
 **Author:** RatherGood1
 
-**Version**: 0.1
+**Version**: 0.2
 
 This is a working demo. Not tested in MMO mode. Check back often for further change/improvements.
 
-**Updated:** 11 Feb 22
+**Updated:** 17 Feb 22
+V0.2 few fixes. Changes to RGRagdoll script
 
-**Compatibility:** Tested on Suriyun MMORPG Kit Version 1.73c and Unity 2020.3.19f1
+**Compatibility:** Tested on Suriyun MMORPG Kit Version 1.73c and Unity 2021.1.23f1
 
 **Core MMORPG Kit modifications:** None
 
