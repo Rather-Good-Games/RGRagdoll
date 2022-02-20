@@ -38,8 +38,19 @@ namespace MultiplayerARPG
         {
             base.Setup(index);
 
-            gameObject.layer = GameInstance.Singleton.ragdollLayerMask; //setup will override this so need to set it back.
+            //gameObject.layer = GameInstance.Singleton.ragdollLayerMask; //setup will override this so need to set it back.
         }
+
+
+        void Update()
+        {
+            if (rgRagdoll.isRagdoll)
+            {
+                defaultLocalPosition = transform.localPosition;
+                defaultLocalRotation = transform.localRotation;
+            }
+        }
+
 
 
     }

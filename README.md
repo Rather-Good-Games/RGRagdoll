@@ -3,11 +3,17 @@
 
 **Author:** RatherGood1
 
-**Version**: 0.2
+**Version**: 0.3
 
 This is a working demo. Not tested in MMO mode. Check back often for further change/improvements.
 
-**Updated:** 17 Feb 22
+**Updated:** 20 Feb 22
+
+V0.3 
+* fixes layers player/monster. 
+* Fixes raycast atatcks (melee/guns etc...) resetting entity transform when attacking ragdoll.  
+* Adds player ragdoll example. (Use Male_CC_RGRG) in place of Male_CC
+
 V0.2 few fixes. Changes to RGRagdoll script
 
 **Compatibility:** Tested on Suriyun MMORPG Kit Version 1.73c and Unity 2021.1.23f1

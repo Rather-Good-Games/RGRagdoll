@@ -12,6 +12,8 @@ namespace MultiplayerARPG
     public class RGRagdoll : MonoBehaviour
     {
 
+        public bool debugTestSeleteMe = false;
+
         public bool isRagdoll = false;
 
         BaseCharacterEntity baseCharacterEntity;
@@ -73,7 +75,7 @@ namespace MultiplayerARPG
 
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                baseCharCollider.enabled = false; //always 
+                //baseCharCollider.enabled = false; //always 
                 baseCharAnimator.enabled = true; //always 
 
             }
@@ -83,13 +85,13 @@ namespace MultiplayerARPG
         {
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                baseCharCollider.enabled = false;
+                //baseCharCollider.enabled = false;
 
                 FindColliders();
             }
             else
             {
-                baseCharCollider.enabled = true;
+                //baseCharCollider.enabled = true;
             }
 
         }
@@ -118,12 +120,13 @@ namespace MultiplayerARPG
         {
             SetRagdoll(false);
         }
+
         public void SetRagdoll(bool ragdoll)
         {
             isRagdoll = ragdoll;
 
             //disable main collider
-            baseCharCollider.enabled = false; //always false
+            //baseCharCollider.enabled = false; //always false
 
             baseCharAnimator.enabled = !ragdoll; //always false
 
@@ -134,7 +137,7 @@ namespace MultiplayerARPG
                 col.attachedRigidbody.isKinematic = !ragdoll;
                 col.attachedRigidbody.useGravity = ragdoll;
 
-                col.gameObject.layer = (ragdoll) ? GameInstance.Singleton.ragdollLayerMask : GameInstance.Singleton.playerLayer;
+                col.gameObject.layer = (ragdoll) ? GameInstance.Singleton.ragdollLayerMask : baseCharacterEntity.gameObject.layer;
 
             }
         }
