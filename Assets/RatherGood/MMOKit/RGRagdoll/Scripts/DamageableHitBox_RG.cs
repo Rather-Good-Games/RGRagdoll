@@ -9,6 +9,8 @@ namespace MultiplayerARPG
     [DisallowMultipleComponent]
     public class DamageableHitBox_RG : DamageableHitBox
     {
+        [Tooltip("If empty will use RagdollBodyPart.ToString() instead")]
+        public string overrideCombatText = "";
 
         public RagdollBodyPart ragdollBodyPart = RagdollBodyPart.Hips;
 
@@ -16,6 +18,15 @@ namespace MultiplayerARPG
         public void InitDamageableHitBox_RG(RGRagdoll rgRagdoll)
         {
             this.rgRagdoll = rgRagdoll;
+
+            if (ragdollBodyPart == RagdollBodyPart.Shield)
+            {
+                if (Application.isPlaying)
+                {
+                    //TODO: Maybe something better than this hack?
+                    enabled = false; //hide on start
+                }
+            }
         }
 
 #if UNITY_EDITOR
@@ -31,20 +42,23 @@ namespace MultiplayerARPG
             base.ReceiveDamage(fromPosition, instigator, damageAmounts, weapon, skill, skillLevel, randomSeed);
 
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
-                rgRagdoll?.SpawnBodyPartCombatText(transform, 0, ragdollBodyPart); //Only works client currently
+            {
+                if (string.IsNullOrEmpty(overrideCombatText))
+                    DamageableEntity.CallAllAppendCombatTextStringRG(ragdollBodyPart.ToString());
+                else
+                    DamageableEntity.CallAllAppendCombatTextStringRG(overrideCombatText);
+            }
         }
 
         public override void Setup(int index)
         {
             base.Setup(index);
-
-            //gameObject.layer = GameInstance.Singleton.ragdollLayerMask; //setup will override this so need to set it back.
         }
 
 
         void Update()
         {
-            if (rgRagdoll.isRagdoll)
+            if ((rgRagdoll != null) && (rgRagdoll.isRagdoll))
             {
                 defaultLocalPosition = transform.localPosition;
                 defaultLocalRotation = transform.localRotation;

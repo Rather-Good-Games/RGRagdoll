@@ -37,7 +37,7 @@ namespace MultiplayerARPG
         {
             BaseCharacterEntity bce = GetComponentInParent<BaseCharacterEntity>();
 
-            Rigidbody[] rbs = bce.GetComponentsInChildren<Rigidbody>();
+            Rigidbody[] rbs = bce.GetComponentsInChildren<Rigidbody>(true);
 
             List<DamageableHitBox_RG> dhbList = new List<DamageableHitBox_RG>();
 
@@ -75,25 +75,18 @@ namespace MultiplayerARPG
 
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                //baseCharCollider.enabled = false; //always 
                 baseCharAnimator.enabled = true; //always 
 
             }
 
         }
+
         void Start()
         {
             if (GameInstance.Singleton.enableRatherGoodRagdoll)
             {
-                //baseCharCollider.enabled = false;
-
                 FindColliders();
             }
-            else
-            {
-                //baseCharCollider.enabled = true;
-            }
-
         }
 
         private void OnEnable()
@@ -107,10 +100,12 @@ namespace MultiplayerARPG
             baseCharacterEntity.onDead.AddListener(SetRagdollOn);
             baseCharacterEntity.onRespawn.AddListener(SetRagdollOff);
         }
+
         void Update()
         {
 
         }
+
         void SetRagdollOn()
         {
             SetRagdoll(true);
@@ -125,39 +120,22 @@ namespace MultiplayerARPG
         {
             isRagdoll = ragdoll;
 
-            //disable main collider
-            //baseCharCollider.enabled = false; //always false
-
             baseCharAnimator.enabled = !ragdoll; //always false
 
             foreach (DamageableHitBox_RG dhb in damageableHitBoxes)
             {
+                if (dhb.ragdollBodyPart == RagdollBodyPart.Shield) //shield does not have joint
+                    continue;
+
                 Collider col = dhb.CacheCollider;
-                if (col == null) col = dhb.GetComponent<Collider>();
+                if (col == null)
+                    col = dhb.GetComponent<Collider>(); //grab first colider if disabled
                 col.attachedRigidbody.isKinematic = !ragdoll;
                 col.attachedRigidbody.useGravity = ragdoll;
-
                 col.gameObject.layer = (ragdoll) ? GameInstance.Singleton.ragdollLayerMask : baseCharacterEntity.gameObject.layer;
 
             }
         }
-
-        public void SpawnBodyPartCombatText(Transform followingTransform, int amount, RagdollBodyPart bodyPart)
-        {
-            if (BaseUISceneGameplay.Singleton.combatTextTransform == null || GameInstance.Singleton.prefabUICombatTextRG == null)
-                return;
-
-            UICombatTextRG combatText = Instantiate(GameInstance.Singleton.prefabUICombatTextRG, BaseUISceneGameplay.Singleton.combatTextTransform);
-            combatText.transform.localScale = Vector3.one;
-            combatText.CacheObjectFollower.TargetObject = followingTransform;
-            combatText.setLeadText = bodyPart.ToString();
-
-            combatText.Amount = amount;
-
-            combatText.gameObject.SetActive(true);
-        }
-
-
 
     }
 
@@ -181,6 +159,7 @@ namespace MultiplayerARPG
         LeftFoot,
         Tail,
         Prop,
+        Shield, //Can block, set damage to 0 or 0.1 or something to reduce damage if shield hit.
 
     }
 

@@ -13,15 +13,10 @@ MonoBehaviour:
   m_Name: GameDatabase_RGRD
   m_EditorClassIdentifier: 
   playerCharacterEntities:
-  - {fileID: 114586576023340800, guid: 0f0836d25b5171245a4c66deb284f48d, type: 3}
-  - {fileID: 114191363084881030, guid: c4ba22d80e3951149993cfdfa83d5bbd, type: 3}
   - {fileID: 7051347207863527725, guid: bbcb897899dc3d84ea4864a40beae177, type: 3}
-  - {fileID: 374512570995460594, guid: f4d75f6a6e5739b46817549dc6c6b73d, type: 3}
-  - {fileID: 114740533051626506, guid: e4504fbed449d4c4cba6c22bd4953a25, type: 3}
-  - {fileID: 114666491478848388, guid: 545a32703d951094185d08198bc8316d, type: 3}
   monsterCharacterEntities:
-  - {fileID: 114107677553822186, guid: 2124e2e5e8dd2794ea8c8aff808d0096, type: 3}
-  - {fileID: 114313543944479198, guid: c26675f5ea04ade429c509dd5998a3a3, type: 3}
+  - {fileID: 4400518928128577770, guid: 886294b93b463d94aa443691e7dca7dc, type: 3}
+  - {fileID: 7975145640556295218, guid: 2355212d337438c4e8cb977fcb953269, type: 3}
   - {fileID: 114355961751498552, guid: fbe9b355dd4e810409312de38efbae6e, type: 3}
   - {fileID: 5503484860487485313, guid: 0586cf25f965f3a4fb8545233fd5f6eb, type: 3}
   vehicleEntities:
@@ -175,7 +170,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1fdbfbd15c3ab674bba487c183dfb99d, type: 2}
   - {fileID: 11400000, guid: 31b3c9ca2358f3748bbacd9bea3ad525, type: 2}
   mapInfos:
-  - {fileID: 11400000, guid: de8b0e4099f8d444692e88f92309e90d, type: 2}
+  - {fileID: 11400000, guid: a754aaa39fe1a3749983887c3924f523, type: 2}
   - {fileID: 11400000, guid: fbe2a93dfafee544cbeaf175d3491e33, type: 2}
   - {fileID: 11400000, guid: 7d05446271b4d8f459650ee3e2489a34, type: 2}
   quests:
